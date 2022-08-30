@@ -56,6 +56,16 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
     0.194 0.184 0.169 0.164 0.154 ]';
 
 
+
+% Wind parameters
+
+vmin = 10;
+vmax = 15;
+direction = 0;
+var = 5;
+
+
+
 %% Simulink model
 
 sim('trajectory_sim.slx')

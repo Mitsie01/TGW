@@ -24,7 +24,7 @@ y0 = 0;                         % y coordinate
 z0 = 0;                         % z coordinate
 
 hdg = 0*rad;                    % heading
-pitch = 45*rad;                 % pitch
+pitch = 90*rad;                 % pitch
 
 v0 = 0;                         % starting velocity
 
@@ -61,8 +61,8 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
 
 vmin = 10;
 vmax = 15;
-direction = 0;
-var = 5;
+direction = 10*rad;
+var = 5*rad;
 
 
 
@@ -72,7 +72,7 @@ sim('trajectory_sim.slx')
 
 figure('Name','Trajectory','NumberTitle','off')
 title('Trajectory')
-plot3(y,x,z)
+plot3(x,y,z)
 grid on
 xlabel('Longitudinal distance (m)') 
 ylabel('Lateral distance (m)')

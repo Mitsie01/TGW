@@ -8,21 +8,25 @@ function dstatedt = Satellite(t,state)
 %ydot = state(5);
 %zdot = state(6);
 
-m = 2.6;
+%inertia and mass
+m_empty = 1261; %kilograms
+%m_payload = 100;
+%m_fuel = 1018;
 
-
+%Kinematics
 vel = state(4:6);
 
-%gravity
+%Gravity Model
 planet
-r = state(1:3);
+r = state(1:3); % r = [x;y;z]
 rnorm = norm(r);
 rhat = r/rnorm;
-Fgrav = -(G*mearth*m/rnorm^2)*rhat;
+Fgrav = -(G*m_earth*m_empty/rnorm^2)*rhat;
 
-
+%Dynamics
 F = Fgrav;
+accel = F/m_empty;
 
-accel = F/m;
+%Return derivatives vector
+dstatedt = [vel;accel];
 
-dstatedt = [vel, accel];

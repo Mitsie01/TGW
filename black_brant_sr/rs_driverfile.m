@@ -1,6 +1,6 @@
 %% Matlab + Simulink Black Brant sounding rocket simulation
 % Mitchell Kampert
-% 31-08-2022
+% 05-09-2022
 % version 1.1
 
 
@@ -42,12 +42,15 @@ nozzle_area = pi*0.34^2;        % surface area of engine nozzle
 % environment properties
 mearth = 5.9722*10^24;          % mass Earth (kg)
 r_earth = 6.3781*10^6;          % radius Earth (m)
+w = (1/43200)*pi;                  % angular velocity Earth (rad/s)
 
 D0 = 1.225;                     % density at sealevel (kg/m^3)
 P0 = 1.01325*10^5;              % pressure at sealevel (Pa)
 H = 7640;                       % scale height
 
 centrifugal_force = true;       % enable/disable centrifugal force
+rotation = false;                % enable/disable Earth rotation
+latitude = 0*rad;               % angle from equator
 
 
 
@@ -62,7 +65,7 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
 
 % Wind parameters
 
-wind_effect = true;
+wind_effect = false;
 
 vmin = 10;
 vmax = 15;
@@ -118,7 +121,7 @@ figure('Name','Vertical accelleration','NumberTitle','off')
 title('vertical accelleration')
 hold on
 xlabel('Time (s)') 
-ylabel('Force (N)')
+ylabel('Accelleration (m/s^2)')
 
 plot(t,fc)
 plot(t,fg)

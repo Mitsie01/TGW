@@ -16,9 +16,9 @@ planet
 
 %Initial Conditions
 launch_altitude = 1400*10^3;                                        % altitude of launching platform (m)
-V0 = 6700;
+V0 = 8200;
 
-
+inclination = 80*rad;
 r0 = r_earth+launch_altitude;                                % distance from the center of Earth (m)
 theta0 = 0*rad;                                              % starting coordinate
 phi0 = 0*rad;                                                % starting coordinate

@@ -8,14 +8,15 @@ rad = 2*pi/360;                                             % From degrees to ra
 %% Constants
 
 %general constants
-dt = 0.01;
+dt = 0.1;
+tmax = 10000;
 
 %Get Planet Parameters
 planet
 
 %Initial Conditions
-launch_altitude = 100;                                        % altitude of launching platform (m)
-V0 = 7100;
+launch_altitude = 1400*10^3;                                        % altitude of launching platform (m)
+V0 = 6700;
 
 
 r0 = r_earth+launch_altitude;                                % distance from the center of Earth (m)
@@ -37,15 +38,20 @@ Z = Z*r_earth/1000;
 %Plot 3D orbit
 sim('globe_simulator.slx')
 
+edge = max(r) + 0.1*max(r);
+
 [x,y,z] = sph2cart(theta, phi, r);
+[x2,y2,z2] = sph2cart(theta2, phi, r2);
 
 fig = figure();
 set(fig,'color','white')
 plot3(x,y,z,'b-','LineWidth',4)
+
 grid on
 hold on
+plot3(x2,y2,z2,'r-','LineWidth',4)
 %surf(X,Y,Z,'EdgeColor','none')
-%axis equal
+axis([-edge edge -edge edge -edge edge])
 xlabel('x') 
 ylabel('y')
 zlabel('z')
@@ -64,4 +70,5 @@ hold on
 xlabel('Time (s)') 
 ylabel('Acceleration to center (m/s^2)')
 plot(t,g)
+plot(t,ca)
 hold off

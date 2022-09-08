@@ -9,16 +9,17 @@ rad = 2*pi/360;                                             % From degrees to ra
 
 %general constants
 dt = 0.1;
-tmax = 10000;
+tmax = 50000;
 
 %Get Planet Parameters
 planet
 
 %Initial Conditions
-launch_altitude = 1400*10^3;                                        % altitude of launching platform (m)
+launch_altitude = 2000*10^3;                                 % altitude of launching platform (m)
+launch_angle = 0*rad;
 V0 = 8200;
 
-inclination = 80*rad;
+inclination = 45*rad;
 r0 = r_earth+launch_altitude;                                % distance from the center of Earth (m)
 theta0 = 0*rad;                                              % starting coordinate
 phi0 = 0*rad;                                                % starting coordinate
@@ -41,7 +42,7 @@ sim('globe_simulator.slx')
 edge = max(r) + 0.1*max(r);
 
 [x,y,z] = sph2cart(theta, phi, r);
-[x2,y2,z2] = sph2cart(theta2, phi, r2);
+[x2,y2,z2] = sph2cart(theta2, phi2, r2);
 
 fig = figure();
 set(fig,'color','white')
@@ -61,7 +62,9 @@ title('Altitude')
 hold on
 xlabel('Time (s)') 
 ylabel('Altitude (m)')
+grid on
 plot(t,r-r_earth)
+plot(t,phi*10^6)
 hold off
 
 figure('Name','Accelleration','NumberTitle','off')

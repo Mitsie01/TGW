@@ -9,7 +9,7 @@ rad = 2*pi/360;                                             % From degrees to ra
 
 %general constants
 dt = 0.1;
-tmax = 50000;
+tmax = 35000;
 
 %Get Planet Parameters
 planet
@@ -17,9 +17,9 @@ planet
 %Initial Conditions
 launch_altitude = 2000*10^3;                                 % altitude of launching platform (m)
 launch_angle = 0*rad;
-V0 = 8200;
+V0 = 8500;
 
-inclination = 45*rad;
+inclination = 0*rad;
 r0 = r_earth+launch_altitude;                                % distance from the center of Earth (m)
 theta0 = 0*rad;                                              % starting coordinate
 phi0 = 0*rad;                                                % starting coordinate

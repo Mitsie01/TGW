@@ -44,6 +44,8 @@ edge = max(r) + 0.1*max(r);
 [x,y,z] = sph2cart(theta, phi, r);
 [x2,y2,z2] = sph2cart(theta2, phi2, r2);
 
+comet3(x, y, z);
+
 fig = figure();
 set(fig,'color','white')
 plot3(x,y,z,'b-','LineWidth',4)

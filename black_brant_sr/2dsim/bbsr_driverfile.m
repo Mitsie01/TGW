@@ -1,12 +1,11 @@
 %% Matlab + Simulink Black Brant sounding rocket simulation
 % Mitchell Kampert
-% 05-09-2022
-% version 1.1
+% 02-10-2022
+% version 1.43
 
 
 %% Initialisation
 clear all
-clc
 
 global rad 
 rad = 2*pi/360;                 % From degrees to radians
@@ -16,8 +15,8 @@ rad = 2*pi/360;                 % From degrees to radians
 
 % generic constants
 G = 6.67430*10^-11;             % Gravitational constant
-dt = 0.01;                      % simulation time step
-tmax = 1000;                   % maximum simulation duration
+dt = 0.001;                      % simulation time step
+tmax = 10000;                   % maximum simulation duration
 
 % launch configuration
 
@@ -25,8 +24,7 @@ tmax = 1000;                   % maximum simulation duration
 x0 = 0;                         % x coordinate
 y0 = 0;                         % y coordinate
 
-pitch = 60*rad;                 % pitch
-railheight = sin(pitch)*25;     % max altitude of rail support
+pitch = 81*rad;                  % pitch
 
 v0 = 0;                         % starting velocity
 
@@ -36,7 +34,14 @@ black_brant_vc
 % Earth properties
 earth
 
-centrifugal_force = true;       % enable/disable centrifugal force
+centrifugal_force = false;       % enable/disable centrifugal force
+rotation = false;        % enable/disable earth's rotation (at equator heading east)
+
+if rotation == false             % initial horizontal velocity
+    veq = 0;
+end
+v0x = sin(pitch)*v0;
+v0y = sin(pitch)*v0;            % initial vertical velocity
 
 
 % Calculated using Missile DATCOM 98
@@ -52,11 +57,65 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
 
 sim('bbsr_sim.slx')
 
+[max, loc] = max(y);
+if pitch > 90*rad
+    minx = x(end)/1000;
+    maxx = 0;
+    miny = 0;
+    maxy = -x(end)/1000;
+elseif pitch <= 90*rad
+    minx = 0;
+    maxx = x(end)/1000;
+    miny = 0;
+    maxy = x(end)/1000;
+end
+fprintf("Flight distance: %f km.\n", (x(end)/1000));
+fprintf("Apogee: %f km.\n", max/1000);
+fprintf("Flight duration: %f seconds.\n", t(end));
+
+p = burn_time/t(end);
+
+
 figure('Name','Trajectory','NumberTitle','off')
 title('Trajectory')
-plot(x,y)
+hold on
+axis([minx maxx miny maxy])
+comet(x/1000,y/1000, p)
 grid on
-xlabel('Distance (m)') 
-ylabel('Altitude (m)')
+xlabel('Distance (km)') 
+ylabel('Altitude (km)')
+hold off
+
+figure('Name','Velocity','NumberTitle','off')
+title('Velocity')
+plot(t,v)
+grid on
+xlabel('Time (s)') 
+ylabel('Velocity (m/s)')
+
+figure('Name','Drag force','NumberTitle','off')
+title('Drag force')
+plot(t,fd)
+grid on
+xlabel('Time (s)') 
+ylabel('Drag (N)')
+
+figure('Name','Vertical accelleration','NumberTitle','off')
+title('vertical accelleration')
+hold on
+xlabel('Time (s)') 
+ylabel('Accelleration (m/s^2)')
+plot(t,ac)
+plot(t,g)
+
+legend({'Centrifugal force','Gravitational force'},'Location','southwest')
+hold off
+
+figure('Name','Engine thrust','NumberTitle','off')
+title('Engine thrust')
+plot(t,thrust)
+grid on
+xlabel('Time (s)') 
+ylabel('Thrust (N)')
 
 

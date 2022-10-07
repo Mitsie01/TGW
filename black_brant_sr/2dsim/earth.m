@@ -6,3 +6,4 @@ veq = w*r_earth;                % velocity at equator (m/s)
 D0 = 1.225;                     % density at sealevel (kg/m^3)
 P0 = 1.01325*10^5;              % pressure at sealevel (Pa)
 H = 7640;                       % scale height
+G0 = 9.80665;                   % standard gravity (m/s^2)

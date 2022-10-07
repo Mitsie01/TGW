@@ -34,7 +34,7 @@ black_brant_vc
 % Earth properties
 earth
 
-centrifugal_force = true;       % enable/disable centrifugal force
+centrifugal_force = false;       % enable/disable centrifugal force
 rotation = false;        % enable/disable earth's rotation (at equator heading east)
 
 if rotation == false             % initial horizontal velocity
@@ -142,11 +142,9 @@ elseif multiplot == true
     title('Trajectory')
     hold on
     for s = 76:1:84
-        fprintf("%d\n", s);
-        for mass = 600:100:1300
-            fprintf("%d\n", mass);
+        for mass = 272.2:45.3:589.7
             pitch = s*rad;
-            mpayload = mass*0.45359237;
+            mpayload = mass;
             sim('bbsr_sim.slx')
             [maxalt, loc] = max(y);
             scatter((x(end)/1000),maxalt/1000, "filled", "black")

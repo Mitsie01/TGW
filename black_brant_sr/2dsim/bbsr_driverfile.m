@@ -1,7 +1,7 @@
 %% Matlab + Simulink Black Brant sounding rocket simulation
 % Mitchell Kampert
-% 02-10-2022
-% version 1.43
+% 10-10-2022
+% version 1.3
 
 
 %% Initialisation
@@ -14,20 +14,20 @@ rad = 2*pi/360;                 % From degrees to radians
 %% Constants
 
 % generic constants
-G = 6.67430*10^-11;             % Gravitational constant
-dt = 0.01;                      % simulation time step
-tmax = 10000;                   % maximum simulation duration
-threshold = 100*10^3;           % threshold altitude
+G = 6.67430*10^-11;                 % Gravitational constant
+dt = 0.01;                          % simulation time step
+tmax = 10000;                       % maximum simulation duration
+threshold = 100*10^3;               % threshold altitude
 
 % launch configuration
 
 % starting configuration
-x0 = 0;                         % x coordinate
-y0 = 0;                         % y coordinate
+x0 = 0;                             % x coordinate
+y0 = 0;                             % y coordinate
 
-pitch = 73*rad;                  % pitch
+pitch = 73*rad;                     % pitch
 
-v0 = 0;                         % starting velocity
+v0 = 0;                             % starting velocity
 
 % rocket properties
 black_brant_vc
@@ -35,14 +35,14 @@ black_brant_vc
 % Earth properties
 earth
 
-centrifugal_force = true;       % enable/disable centrifugal force
-rotation = false;                % enable/disable earth's rotation (at equator heading east)
+centrifugal_force = false;          % enable/disable centrifugal force
+rotation = false;                   % enable/disable earth's rotation (at equator heading east)
 
-if rotation == false             % initial horizontal velocity
+if rotation == false                % initial horizontal velocity
     veq = 0;
 end
-v0x = sin(pitch)*v0;
-v0y = sin(pitch)*v0;            % initial vertical velocity
+v0x = cos(pitch)*v0;
+v0y = sin(pitch)*v0;                % initial vertical velocity
 
 
 % Calculated using Missile DATCOM 98
@@ -57,7 +57,7 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
 %% Run Simulink and plot data
 
 % Set simulation type
-multiplot = true;                          % Create scatter plot of the apogee/distance of the BBSR at multiple angles/payloads
+multiplot = false;                          % Create scatter plot of the apogee/distance of the BBSR at multiple angles/payloads
 
 % Multiplot settings
 metric = false;                             % Set unit of mass for multiplot

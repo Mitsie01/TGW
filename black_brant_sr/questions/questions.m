@@ -34,8 +34,8 @@ black_brant_vc
 % Earth properties
 earth
 
-centrifugal_force = false;       % enable/disable centrifugal force
-rotation = false;                % enable/disable earth's rotation (at equator heading east)
+centrifugal_force = true;       % enable/disable centrifugal force
+rotation = true;                % enable/disable earth's rotation (at equator heading east)
 
 if rotation == false             % initial horizontal velocity
     veq = 0;
@@ -65,9 +65,9 @@ min_pl = 600;                               % Minimum payload for multiplot
 max_pl = 1300;                              % Maximum payload for multiplot
 pl_inc = 100;                               % Set payload increment for multiplot
 
-min_pitch = 72;                             % Minimum pitch for multiplot (deg)
-max_pitch = 74;                             % Maximum pitch for multiplot (deg)
-pitch_inc = 0.5;                              % Set pitch increment for multiplot (deg)
+min_pitch = 71;                             % Minimum pitch for multiplot (deg)
+max_pitch = 73;                             % Maximum pitch for multiplot (deg)
+pitch_inc = 0.2;                              % Set pitch increment for multiplot (deg)
 
 
 sim('qsim.slx')

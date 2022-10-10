@@ -17,6 +17,7 @@ rad = 2*pi/360;                 % From degrees to radians
 G = 6.67430*10^-11;             % Gravitational constant
 dt = 0.01;                      % simulation time step
 tmax = 10000;                   % maximum simulation duration
+threshold = 100*10^3;           % threshold altitude
 
 % launch configuration
 
@@ -24,7 +25,7 @@ tmax = 10000;                   % maximum simulation duration
 x0 = 0;                         % x coordinate
 y0 = 0;                         % y coordinate
 
-pitch = 76*rad;                  % pitch
+pitch = 73*rad;                  % pitch
 
 v0 = 0;                         % starting velocity
 
@@ -35,7 +36,7 @@ black_brant_vc
 earth
 
 centrifugal_force = true;       % enable/disable centrifugal force
-rotation = false;        % enable/disable earth's rotation (at equator heading east)
+rotation = false;                % enable/disable earth's rotation (at equator heading east)
 
 if rotation == false             % initial horizontal velocity
     veq = 0;
@@ -55,29 +56,49 @@ Cd=[0.386 0.329 0.325 0.469 0.488 0.434 0.389 0.328 0.287 0.255 0.216 ....
 
 %% Run Simulink and plot data
 
-multiplot = true;
+% Set simulation type
+multiplot = true;                          % Create scatter plot of the apogee/distance of the BBSR at multiple angles/payloads
 
+% Multiplot settings
+metric = false;                             % Set unit of mass for multiplot
+
+min_pl = 600;                               % Minimum payload for multiplot
+max_pl = 1300;                              % Maximum payload for multiplot
+pl_inc = 100;                               % Set payload increment for multiplot
+
+min_pitch = 76;                             % Minimum pitch for multiplot (deg)
+max_pitch = 84;                             % Maximum pitch for multiplot (deg)
+pitch_inc = 1;                              % Set pitch increment for multiplot (deg)
+
+
+% Run simulation
 if multiplot == false
     sim('bbsr_sim.slx')
     
     [maxalt, loc] = max(y);
+    if x(end) > maxalt
+        pltmax = x(end)/1000;
+    else
+        pltmax = maxalt/1000;
+    end
+
     if pitch > 90*rad
-        minx = x(end)/1000;
+        minx = pltmax;
         maxx = 0;
         miny = 0;
-        maxy = -x(end)/1000;
+        maxy = -pltmax;
     elseif pitch <= 90*rad
         minx = 0;
-        maxx = x(end)/1000;
+        maxx = pltmax;
         miny = 0;
-        maxy = x(end)/1000;
+        maxy = pltmax;
     end
     fprintf("Flight distance: %f km.\n", (x(end)/1000));
     fprintf("Apogee: %f km.\n", maxalt/1000);
+    fprintf("Time spent above %i km: %f seconds.\n", threshold/1000, tthreshold(end));
     fprintf("Flight duration: %f seconds.\n", t(end));
     
     p = burn_time/t(end);
-    
     
     figure('Name','Trajectory','NumberTitle','off')
     title('Trajectory')
@@ -88,21 +109,13 @@ if multiplot == false
     xlabel('Distance (km)') 
     ylabel('Altitude (km)')
     hold off
-    
+
     figure('Name','Velocity','NumberTitle','off')
     title('Velocity')
     plot(t,v)
     grid on
     xlabel('Time (s)') 
     ylabel('Velocity (m/s)')
-    
-    figure('Name','Acceleration','NumberTitle','off')
-    title('Acceleration')
-    plot(t,a)
-    grid on
-    xlabel('Time (s)') 
-    ylabel('Acceleration (m/s^s)')
-    
     
     figure('Name','Drag force','NumberTitle','off')
     title('Drag force')
@@ -119,7 +132,7 @@ if multiplot == false
     plot(t,ac)
     plot(t,g)
     
-    legend({'Centrifugal force','Gravitational force'},'Location','southwest')
+    legend({'Centrifugal force','Gravitational force'},'Location','northeastoutside')
     hold off
     
     figure('Name','Engine thrust','NumberTitle','off')
@@ -136,20 +149,29 @@ if multiplot == false
     xlabel('Time (s)') 
     ylabel('Mass (kg)')
 
+    figure('Name','Angle of flight','NumberTitle','off')
+    title('Angle of flight')
+    plot(t,aof*(180/pi))
+    grid on
+    xlabel('Time (s)') 
+    ylabel('Angle of flight (deg)')
+
 elseif multiplot == true
     dt = 0.1;
     figure('Name','Trajectory','NumberTitle','off')
     title('Trajectory')
     hold on
-    for s = 76:1:84
-        fprintf("%d\n", s);
-        for mass = 600:100:1300
-            fprintf("%d\n", mass);
+    for s = min_pitch:pitch_inc:max_pitch
+        for mass = min_pl:pl_inc:max_pl
             pitch = s*rad;
-            mpayload = mass*0.45359237;
+            if metric == true
+                mpayload = mass;
+            elseif metric == false
+                mpayload = mass*0.45359237;
+            end
             sim('bbsr_sim.slx')
             [maxalt, loc] = max(y);
-            scatter((x(end)/1000),maxalt/1000, "filled", "black")
+            scatter((x(end)/1000),maxalt/1000, 25,"o", "filled", "k")
         end
     end
 end

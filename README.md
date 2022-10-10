@@ -1,5 +1,5 @@
 # TGW
 
-## Black Brant sounding rocket
+## Black Brant VC sounding rocket
 
-Simulink model of the Black Brant sounding rocket. 
+Matlab/Simulink model of the Black Brant VC sounding rocket.
